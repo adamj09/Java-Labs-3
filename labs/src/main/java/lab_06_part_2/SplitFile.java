@@ -8,9 +8,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * @author Adam Johnston 2332003
+ * 
+ *         Commandline program used to split a file into multiple smaller files.
+ */
 public class SplitFile {
     public static void main(String[] args) {
-        // Check if required args were provided.
+        // Check if required number of args was provided.
         if (args.length < 3) {
             printValidUsageInfo();
             System.exit(1);
@@ -38,10 +43,21 @@ public class SplitFile {
             System.exit(4);
         }
 
-        // Split file using
+        // Split file.
         splitFile(srcPath, numPieces, keepFileExtension);
     }
 
+    /**
+     * Splits a file into multiple smaller files using binary I/O.
+     * 
+     * @param filepath          absolute path to the source file.
+     * @param numberOfPieces    number of smaller files to split the source file
+     *                          into.
+     * @param keepFileExtension determines whether to keep the source file's
+     *                          extension when saving the smaller files. If set to
+     *                          false, the newly created smaller files will have no
+     *                          extension.
+     */
     public static void splitFile(String filepath, int numberOfPieces, boolean keepFileExtension) {
         File srcFile = new File(filepath);
 
@@ -50,7 +66,7 @@ public class SplitFile {
             // Get extension to append to split files.
             int index = filepath.lastIndexOf('.');
             if (index > 0) {
-                extension = filepath.substring(index + 1);
+                extension = "." + filepath.substring(index + 1);
             }
         }
 
@@ -72,7 +88,7 @@ public class SplitFile {
                 int bytesRead = inputStream.read(bytes, 0, bytesPerFile);
                 inputStream.mark(0);
 
-                File dstFile = new File(dstDir.getPath() + "/dst" + i + "." + extension);
+                File dstFile = new File(dstDir.getPath() + "/dst" + i + extension);
 
                 // If the destination file already exists, abort.
                 if (dstFile.exists()) {
@@ -97,6 +113,9 @@ public class SplitFile {
         }
     }
 
+    /**
+     * Prints the list of commandline arguments required to use this program.
+     */
     private static void printValidUsageInfo() {
         System.err.println(
                 "Valid usage:\nArgument 1: path to source file.\nArgument 2: number of pieces to split file into (a positive integer value).\nArgument 3: keep file extension? (Y/N)");
