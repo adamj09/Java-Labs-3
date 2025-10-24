@@ -85,7 +85,7 @@ public class SplitFile {
             // from the larger file, then write those bytes to the smaller file.
             for (int i = 0; i < numberOfPieces; i++) {
                 byte[] bytes = new byte[bytesPerFile];
-                int bytesRead = inputStream.read(bytes, 0, bytesPerFile);
+                int bytesRead = inputStream.read(bytes);
                 inputStream.mark(0);
 
                 File dstFile = new File(dstDir.getPath() + "/dst" + i + extension);
