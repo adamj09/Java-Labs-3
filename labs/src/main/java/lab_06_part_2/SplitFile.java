@@ -103,7 +103,6 @@ public class SplitFile {
                 System.out.println("\t" + bytesRead + " bytes written to " + dstFile.getAbsolutePath());
                 outputStream.close();
             }
-
         } catch (FileNotFoundException ex) {
             System.err.println("Cannot find source file: " + filepath);
             System.exit(2);
