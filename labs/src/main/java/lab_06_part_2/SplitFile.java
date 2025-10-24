@@ -98,10 +98,10 @@ public class SplitFile {
 
                 dstFile.createNewFile();
 
-                try (DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(dstFile))) {
-                    outputStream.write(bytes);
-                    System.out.println("\t" + bytesRead + " bytes written to " + dstFile.getAbsolutePath());
-                }
+                DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(dstFile));
+                outputStream.write(bytes);
+                System.out.println("\t" + bytesRead + " bytes written to " + dstFile.getAbsolutePath());
+                outputStream.close();
             }
 
         } catch (FileNotFoundException ex) {
