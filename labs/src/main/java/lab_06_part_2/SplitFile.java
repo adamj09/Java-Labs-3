@@ -30,23 +30,23 @@ public class SplitFile {
             System.exit(3);
         }
 
-        boolean saveToBinary = false;
+        boolean keepFileExtension = false;
         if (args[2].equalsIgnoreCase("Y")) {
-            saveToBinary = true;
+            keepFileExtension = true;
         } else if (!args[2].equalsIgnoreCase("N")) {
             printValidUsageInfo();
             System.exit(4);
         }
 
         // Split file using
-        splitFile(srcPath, numPieces, saveToBinary);
+        splitFile(srcPath, numPieces, keepFileExtension);
     }
 
-    public static void splitFile(String filepath, int numberOfPieces, boolean saveToBinary) {
+    public static void splitFile(String filepath, int numberOfPieces, boolean keepFileExtension) {
         File srcFile = new File(filepath);
 
         String extension = "";
-        if (!saveToBinary) {
+        if (keepFileExtension) {
             // Get extension to append to split files.
             int index = filepath.lastIndexOf('.');
             if (index > 0) {
@@ -57,7 +57,7 @@ public class SplitFile {
         try (DataInputStream inputStream = new DataInputStream(new FileInputStream(srcFile))) {
             // Number of bytes each smaller file should contain.
             int bytesPerFile = (int) ((srcFile.length() % numberOfPieces == 0 ? srcFile.length()
-                    : ((srcFile.length() / numberOfPieces) + 1) * numberOfPieces) / numberOfPieces);
+                    : ((srcFile.length() / numberOfPieces) + numberOfPieces)));
 
             // Create a new directory to store the split files.
             File dstDir = new File(srcFile.getParent() + "/dst");
