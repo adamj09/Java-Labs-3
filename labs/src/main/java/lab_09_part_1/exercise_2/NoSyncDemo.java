@@ -3,6 +3,12 @@ package lab_09_part_1.exercise_2;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * @author Adam Johnston 2332003
+ * 
+ *         Demo class that initializes 1000 threads and uses each thread to add 1 to
+ *         an integer. Does not use synchronization.
+ */
 public class NoSyncDemo {
     private static Integer sum = 0;
 
