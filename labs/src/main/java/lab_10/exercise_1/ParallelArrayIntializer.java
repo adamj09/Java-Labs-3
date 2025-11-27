@@ -7,19 +7,16 @@ import java.util.concurrent.RecursiveAction;
 public class ParallelArrayIntializer {
     public static void main(String[] args) {
         final int SIZE = 9000000;
-        double[] list1 = new double[SIZE];
-        double[] list2 = new double[SIZE];
+        double[] list1 = new double[SIZE], list2 = new double[SIZE];
 
         long startTime = System.nanoTime();
         assignValues(list1);
-        long endTime = System.nanoTime();
-        long elapsedTime = endTime - startTime;
+        long elapsedTime = System.nanoTime() - startTime;
         System.out.println("Sequential time [ms]: " + (double) elapsedTime / (1000000));
 
         startTime = System.nanoTime();
         parallelAssignValues(list2);
-        endTime = System.nanoTime();
-        elapsedTime = endTime - startTime;
+        elapsedTime = System.nanoTime() - startTime;
 
         System.out.println("Parallel time [ms]: " + (double) elapsedTime / (1000000));
     }
