@@ -42,7 +42,7 @@ public class ParallelArrayIntializer {
         private int high, low;
         private double[] list;
 
-        AssignTask(double[] list, int low, int high) {
+        public AssignTask(double[] list, int low, int high) {
             this.list = list;
             this.high = high;
             this.low = low;
