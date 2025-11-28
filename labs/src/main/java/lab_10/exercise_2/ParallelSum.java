@@ -1,35 +1,56 @@
 package lab_10.exercise_2;
+
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
-import lab_10.exercise_1.ParallelArrayIntializer;
-
+/**
+ * @author Adam Johnston 2332003
+ * 
+ *         Class used to demonstrate the computation of the sum of an array of
+ *         doubles using both multi-processing and sequential execution.
+ */
 public class ParallelSum {
     public static void main(String[] args) {
         final int SIZE = 9000000;
         double[] list = new double[SIZE];
 
-        ParallelArrayIntializer.parallelAssignValues(list);
+        // Populate the array.
+        for (int i = 0; i < list.length; i++) {
+            list[i] = i;
+        }
 
         long startTime = System.nanoTime();
         double parallelSum = parallelSum(list);
         long elapsedTime = System.nanoTime() - startTime;
 
-        System.out.println("Parallel sum: " + parallelSum + " computed in " + (double)elapsedTime / 1000000 + "ms");
+        System.out.println("Parallel sum: " + parallelSum + " computed in " + (double) elapsedTime / 1000000 + "ms");
 
         startTime = System.nanoTime();
         double sum = sum(list);
         elapsedTime = System.nanoTime() - startTime;
 
-        System.out.println("Sum: " + sum + " computed in " + (double)elapsedTime / 1000000 + "ms");
+        // Note: sequential time only seems to be slower for very large arrays
+        // (>> 9,000,000 items), this may be due to starting new tasks and recursion
+        // being more expensive than performing additions.
+        System.out.println("Sum: " + sum + " computed in " + (double) elapsedTime / 1000000 + "ms");
     }
 
+    /**
+     * Sums the elements of the given array in parallel.
+     * @param list The array to sum.
+     * @return The sum of the array elements.
+     */
     public static double parallelSum(double[] list) {
         RecursiveTask<Double> mainTask = new SumTask(list, 0, list.length);
         ForkJoinPool pool = new ForkJoinPool();
         return pool.invoke(mainTask);
     }
 
+    /**
+     * Sums the elements of the given array sequentially.
+     * @param list The array to sum.
+     * @return The sum of the array elements.
+     */
     public static double sum(double[] list) {
         double sum = 0;
         for (int i = 0; i < list.length; i++) {
@@ -38,6 +59,9 @@ public class ParallelSum {
         return sum;
     }
 
+    /**
+     * A RecursiveTask to compute the sum of an array.
+     */
     private static class SumTask extends RecursiveTask<Double> {
         private static final int THRESHOLD = 500;
         private int high, low;
@@ -57,7 +81,7 @@ public class ParallelSum {
                     sum += list[i];
                 }
                 return sum;
-            } else {
+            } else { // Split array in two if the threshold is met.
                 int mid = (high + low) / 2;
                 RecursiveTask<Double> left = new SumTask(list, low, mid);
                 RecursiveTask<Double> right = new SumTask(list, mid, high);
